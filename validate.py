@@ -91,10 +91,6 @@ for tpl in xls.itertuples():
                 correct += 1
             else:
                 incorrect += 1
-                if predict[5] < tpl.conc:
-                    print('high', tpl.sex)
-                else:
-                    print('low', tpl.sex)
 
 
     # for future simulations, incorporate this information...
