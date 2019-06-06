@@ -20,7 +20,7 @@ xls = pandas.read_excel(src_path, converters={'date': str, 'time': str})
 
 ptid = None
 
-new_columns = {k:[] for k in ['5pct', 'median', '95pct', 'n_levels']}
+new_columns = {k:[] for k in ['2.5pct', 'median', '97.5pct', 'n_levels']}
 correct = incorrect = 0
 for tpl in xls.itertuples():
     for l in new_columns.values():
@@ -54,7 +54,7 @@ for tpl in xls.itertuples():
         pthx = [
             'PARAM total body weight %f kg' % weight,
             'PARAM creatinine clearance %f mL/min' % cockcroft_gault,
-            'MAX 101',
+            'MAX 201',
             'TRY 1000000',
         ]
 
@@ -80,14 +80,14 @@ for tpl in xls.itertuples():
                 predict.append(float(line.split()[3]))
     predict.sort()
 
-    if len(predict) == 101:
-        new_columns['5pct'][-1] = '%.1f' % predict[5]
-        new_columns['median'][-1] = '%.1f' % predict[50]
-        new_columns['95pct'][-1] = '%.1f' % predict[95]
+    if len(predict) == 201:
+        new_columns['2.5pct'][-1] = '%.1f' % predict[5]
+        new_columns['median'][-1] = '%.1f' % predict[100]
+        new_columns['97.5pct'][-1] = '%.1f' % predict[195]
         new_columns['n_levels'][-1] = num_levels
 
         if tpl.conc not in ('.', 'BLQ'):
-            if predict[5] < tpl.conc < predict[95]:
+            if predict[5] < tpl.conc < predict[195]:
                 correct += 1
             else:
                 incorrect += 1
@@ -112,6 +112,6 @@ for tpl in xls.itertuples():
 for k, v in new_columns.items():
     xls[k] = v # Can't just use update() unfortunately
 
-print('%d/%d (%.01f%%)' % (correct, correct+incorrect, correct*100/(correct+incorrect)))
-
 xls.to_excel(dest_path, index=False)
+
+print('%d/%d (%.1f%%)' % (correct, correct+incorrect, correct*100/(correct+incorrect)))
