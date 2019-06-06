@@ -108,6 +108,7 @@ for tpl in xls.itertuples():
         conc = tpl.conc
         if conc == 'BLQ': conc = 0
 
+        # Comment this line to disable Bayesian estimation
         pthx.append('%f h LEVEL %f mg/L' % (rel_hours, conc))
 
     # print(new_column[-1])
