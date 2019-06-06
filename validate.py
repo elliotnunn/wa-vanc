@@ -24,7 +24,7 @@ xls = pandas.read_excel(src_path, converters={'date': str, 'time': str})
 
 
 # We will add these columns to the output
-new_columns = {k:[] for k in ['2.5pct', 'median', '97.5pct', 'n_levels']}
+new_columns = {k:[] for k in ['cockcroft_gault', '2.5pct', 'median', '97.5pct', 'n_levels']}
 
 
 # Iterate (slowly) over every row of the chart,
@@ -76,7 +76,9 @@ for tpl in xls.itertuples():
         ]
 
         # Print this pt to the console
-        print('ID=%03d tbw=%03d crcl=%03d' % (ptid, weight, cockcroft_gault))
+        print(ptid)
+
+    new_columns['cockcroft_gault'][-1] = int(cockcroft_gault)
 
     # Time in hours relative to patient's first dose
     rel_hours = (t - pt0).total_seconds() / 60 / 60
